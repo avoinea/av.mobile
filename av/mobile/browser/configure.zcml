@@ -1,0 +1,20 @@
+<configure
+  xmlns:browser="http://namespaces.zope.org/browser"
+  i18n_domain="av.mobile">
+
+  <browser:page
+    for="eea.facetednavigation.interfaces.IFacetedNavigable"
+    name="app.json"
+    class=".view.App"
+    attribute="json"
+    permission="zope2.View"
+    />
+
+  <browser:page
+    for="eea.facetednavigation.interfaces.IFacetedNavigable"
+    name="query.json"
+    class=".view.Query"
+    permission="zope2.View"
+    />
+
+</configure>
