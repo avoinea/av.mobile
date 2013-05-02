@@ -70,20 +70,17 @@ class Query(FacetedQueryHandler):
         }
 
         for brain in batch:
-            doc = brain.getObject()
             url = brain.getURL()
-            original = doc.getField('url').getAccessor(doc)()
-            image = doc.getField('image').getAccessor(doc)()
-            thumbnail = url + '/' + 'image_preview' if image else ''
+            thumbnail = url + '/' + 'image_preview' if brain.hasImage else ''
 
             item = {
                 'title': brain.Title,
                 'description': brain.Description,
                 'url': url,
                 'thumbnail': thumbnail,
-                'original': original,
+                'original': brain.sourceUrl,
                 'date': brain.EffectiveDate,
-                'source': doc.getParentNode().getParentNode().getParentNode().getId()
+                'source': brain.sourceTitle,
             }
             res['items'].append(item)
 
