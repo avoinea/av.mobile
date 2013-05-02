@@ -7,6 +7,11 @@ from eea.facetednavigation.caching import ramcache
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.caching import cacheKeyFacetedNavigation
 from eea.facetednavigation.browser.app.query import FacetedQueryHandler
+try:
+    import Missing
+    missing = Missing.Value
+except (ImportError, AttributeError):
+    missing = None
 
 class App(BrowserView):
     """ App
@@ -71,14 +76,18 @@ class Query(FacetedQueryHandler):
 
         for brain in batch:
             url = brain.getURL()
-            thumbnail = url + '/' + 'image_preview' if brain.hasImage else ''
+            sourceUrl = brain.sourceUrl
+            sourceUrl = url if sourceUrl is missing else sourceUrl
+            hasImage = brain.hasImage
+            hasImage = False if hasImage is missing else hasImage
+            thumbnail = url + '/' + 'image_preview' if hasImage else ''
 
             item = {
                 'title': brain.Title,
                 'description': brain.Description,
                 'url': url,
                 'thumbnail': thumbnail,
-                'original': brain.sourceUrl,
+                'original': sourceUrl,
                 'date': brain.EffectiveDate,
                 'source': brain.sourceTitle,
             }
